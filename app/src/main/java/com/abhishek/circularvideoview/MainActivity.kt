@@ -18,7 +18,9 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 import com.google.android.exoplayer2.video.VideoRendererEventListener
 import io.reactivex.Flowable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.concurrent.TimeUnit
 
@@ -57,7 +59,14 @@ class MainActivity : AppCompatActivity(), VideoRendererEventListener, Player.Eve
 
         disposable = Flowable
             .interval(2, TimeUnit.SECONDS)
-            .doOnNext { n -> Log.e(TAG, "Lol $n") }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnNext { n ->
+                Log.e(TAG, "Lol $n")
+                val params = exo_player.layoutParams
+                params.height = params.height + 40
+                exo_player.layoutParams = params
+            }
             .subscribe()
     }
 
