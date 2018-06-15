@@ -17,13 +17,17 @@ import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 import com.google.android.exoplayer2.video.VideoRendererEventListener
+import io.reactivex.Flowable
+import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.concurrent.TimeUnit
 
 
 class MainActivity : AppCompatActivity(), VideoRendererEventListener, Player.EventListener {
 
     private val TAG = "MainActivity"
     private var player: SimpleExoPlayer? = null
+    private var disposable: Disposable? = null
     private var loopingSource: LoopingMediaSource? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,11 +54,17 @@ class MainActivity : AppCompatActivity(), VideoRendererEventListener, Player.Eve
         player?.prepare(loopingSource)
         player?.addListener(this)
         player?.playWhenReady = true
+
+        disposable = Flowable
+            .interval(2, TimeUnit.SECONDS)
+            .doOnNext { n -> Log.e(TAG, "Lol $n") }
+            .subscribe()
     }
 
     override fun onStop() {
         super.onStop()
         player?.stop()
+        disposable?.dispose()
     }
 
     override fun onVideoEnabled(counters: DecoderCounters) {
