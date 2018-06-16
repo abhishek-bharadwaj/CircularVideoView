@@ -1,5 +1,6 @@
 package com.abhishek.circularvideoview
 
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -31,6 +32,7 @@ class MainActivity : AppCompatActivity(), VideoRendererEventListener, Player.Eve
 
     private val TAG = "MainActivity"
     private var player: SimpleExoPlayer? = null
+    private val random = Random()
     private var disposable: Disposable? = null
     private var loopingSource: LoopingMediaSource? = null
 
@@ -67,10 +69,8 @@ class MainActivity : AppCompatActivity(), VideoRendererEventListener, Player.Eve
             .observeOn(AndroidSchedulers.mainThread())
             .doOnNext { n ->
                 if ((n.toInt() % 2) == 0) {
-                    Log.e("OOOOO", "playing full screen")
                     playVideoInFullScreenMode()
                 } else {
-                    Log.e("OOOOO", "playing circular one")
                     playVideoInCircle()
                 }
             }
@@ -81,6 +81,7 @@ class MainActivity : AppCompatActivity(), VideoRendererEventListener, Player.Eve
         val params = cv.layoutParams
         params.height = 200 + Random().nextInt(10) * 100
         cv.layoutParams = params
+        setRandomCardBackground()
 
         rfl.visibility = View.VISIBLE
         cv.visibility = View.VISIBLE
@@ -97,6 +98,11 @@ class MainActivity : AppCompatActivity(), VideoRendererEventListener, Player.Eve
 
         exo_player_full_screen.player = player
         exo_player_full_screen.requestFocus()
+    }
+
+    private fun setRandomCardBackground() {
+        val color = Color.argb(255, random.nextInt(256), random.nextInt(256), random.nextInt(256))
+        cv.setCardBackgroundColor(color)
     }
 
     override fun onStop() {
