@@ -46,9 +46,7 @@ class MainActivity : AppCompatActivity(), VideoRendererEventListener, Player.Eve
 
         exo_player.useController = false
         exo_player_full_screen.useController = false
-
-//        exo_player_full_screen.requestFocus()
-//        exo_player_full_screen.player = player
+        playVideoInCircle()
 
         val mp4VideoUri =
             Uri.parse("http://54.255.155.24:1935//Live/_definst_/amlst:sweetbcha1novD235L240P/playlist.m3u8")
@@ -69,26 +67,36 @@ class MainActivity : AppCompatActivity(), VideoRendererEventListener, Player.Eve
             .observeOn(AndroidSchedulers.mainThread())
             .doOnNext { n ->
                 if ((n.toInt() % 2) == 0) {
-                    val params = cv.layoutParams
-                    params.height = 200 + Random().nextInt(10) * 100
-                    cv.layoutParams = params
-
-                    rfl.visibility = View.VISIBLE
-                    cv.visibility = View.VISIBLE
-                    exo_player_full_screen.visibility = View.GONE
-
-                    exo_player.player = player
-                    exo_player.requestFocus()
+                    Log.e("OOOOO", "playing full screen")
+                    playVideoInFullScreenMode()
                 } else {
-                    rfl.visibility = View.GONE
-                    cv.visibility = View.GONE
-                    exo_player_full_screen.visibility = View.VISIBLE
-
-                    exo_player_full_screen.player = player
-                    exo_player_full_screen.requestFocus()
+                    Log.e("OOOOO", "playing circular one")
+                    playVideoInCircle()
                 }
             }
             .subscribe()
+    }
+
+    private fun playVideoInCircle() {
+        val params = cv.layoutParams
+        params.height = 200 + Random().nextInt(10) * 100
+        cv.layoutParams = params
+
+        rfl.visibility = View.VISIBLE
+        cv.visibility = View.VISIBLE
+        exo_player_full_screen.visibility = View.GONE
+
+        exo_player.player = player
+        exo_player.requestFocus()
+    }
+
+    private fun playVideoInFullScreenMode() {
+        rfl.visibility = View.GONE
+        cv.visibility = View.GONE
+        exo_player_full_screen.visibility = View.VISIBLE
+
+        exo_player_full_screen.player = player
+        exo_player_full_screen.requestFocus()
     }
 
     override fun onStop() {
