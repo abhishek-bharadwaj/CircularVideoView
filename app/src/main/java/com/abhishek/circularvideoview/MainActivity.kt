@@ -22,6 +22,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 
@@ -57,17 +58,16 @@ class MainActivity : AppCompatActivity(), VideoRendererEventListener, Player.Eve
         player?.addListener(this)
         player?.playWhenReady = true
 
-        /*disposable = Flowable
-            .interval(2, TimeUnit.SECONDS)
+        disposable = Flowable
+            .interval(3, TimeUnit.SECONDS)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnNext { n ->
-                Log.e(TAG, "Lol $n")
-                val params = exo_player.layoutParams
-                params.height = (300 * n).toInt()
-                exo_player.layoutParams = params
+                val params = cv.layoutParams
+                params.height = 200 + Random().nextInt(10) * 100
+                cv.layoutParams = params
             }
-            .subscribe()*/
+            .subscribe()
     }
 
     override fun onStop() {
