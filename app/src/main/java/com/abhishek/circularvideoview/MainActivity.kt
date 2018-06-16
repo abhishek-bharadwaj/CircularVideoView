@@ -57,17 +57,17 @@ class MainActivity : AppCompatActivity(), VideoRendererEventListener, Player.Eve
         player?.addListener(this)
         player?.playWhenReady = true
 
-        disposable = Flowable
+        /*disposable = Flowable
             .interval(2, TimeUnit.SECONDS)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnNext { n ->
                 Log.e(TAG, "Lol $n")
                 val params = exo_player.layoutParams
-                params.height = params.height + 40
+                params.height = (300 * n).toInt()
                 exo_player.layoutParams = params
             }
-            .subscribe()
+            .subscribe()*/
     }
 
     override fun onStop() {
