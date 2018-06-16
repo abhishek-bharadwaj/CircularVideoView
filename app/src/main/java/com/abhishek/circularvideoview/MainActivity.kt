@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.Surface
+import android.view.View
 import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.decoder.DecoderCounters
 import com.google.android.exoplayer2.source.LoopingMediaSource
@@ -42,9 +43,13 @@ class MainActivity : AppCompatActivity(), VideoRendererEventListener, Player.Eve
         val trackSelector = DefaultTrackSelector(videoTrackSelectionFactory)
 
         player = ExoPlayerFactory.newSimpleInstance(this, trackSelector)
-        exo_player.useController = true
-        exo_player.requestFocus()
-        exo_player.player = player
+
+        exo_player.useController = false
+        exo_player_full_screen.useController = false
+
+//        exo_player_full_screen.requestFocus()
+//        exo_player_full_screen.player = player
+
         val mp4VideoUri =
             Uri.parse("http://54.255.155.24:1935//Live/_definst_/amlst:sweetbcha1novD235L240P/playlist.m3u8")
         val bandwidthMeterA = DefaultBandwidthMeter()
@@ -59,13 +64,29 @@ class MainActivity : AppCompatActivity(), VideoRendererEventListener, Player.Eve
         player?.playWhenReady = true
 
         disposable = Flowable
-            .interval(3, TimeUnit.SECONDS)
+            .interval(5, TimeUnit.SECONDS)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnNext { n ->
-                val params = cv.layoutParams
-                params.height = 200 + Random().nextInt(10) * 100
-                cv.layoutParams = params
+                if ((n.toInt() % 2) == 0) {
+                    val params = cv.layoutParams
+                    params.height = 200 + Random().nextInt(10) * 100
+                    cv.layoutParams = params
+
+                    rfl.visibility = View.VISIBLE
+                    cv.visibility = View.VISIBLE
+                    exo_player_full_screen.visibility = View.GONE
+
+                    exo_player.player = player
+                    exo_player.requestFocus()
+                } else {
+                    rfl.visibility = View.GONE
+                    cv.visibility = View.GONE
+                    exo_player_full_screen.visibility = View.VISIBLE
+
+                    exo_player_full_screen.player = player
+                    exo_player_full_screen.requestFocus()
+                }
             }
             .subscribe()
     }

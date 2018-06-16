@@ -7,11 +7,13 @@
     tools:context=".MainActivity">
 
     <com.abhishek.circularvideoview.RoundFrameLayout
+        android:id="@+id/rfl"
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="16dp"
         android:elevation="6dp"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -30,6 +32,12 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="76dp"
+        android:visibility="gone"
         app:layout_constraintTop_toTopOf="parent" />
 
+
+    <com.google.android.exoplayer2.ui.SimpleExoPlayerView
+        android:id="@+id/exo_player_full_screen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </android.support.constraint.ConstraintLayout>
