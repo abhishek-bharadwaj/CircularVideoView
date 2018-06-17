@@ -48,7 +48,6 @@ class MainActivity : AppCompatActivity(), VideoRendererEventListener, Player.Eve
 
         exo_player.useController = false
         exo_player_full_screen.useController = false
-        playVideoInCircle()
 
         val mp4VideoUri =
             Uri.parse("http://54.255.155.24:1935//Live/_definst_/amlst:sweetbcha1novD235L240P/playlist.m3u8")
@@ -61,8 +60,8 @@ class MainActivity : AppCompatActivity(), VideoRendererEventListener, Player.Eve
         loopingSource = LoopingMediaSource(videoSource)
         player?.prepare(loopingSource)
         player?.addListener(this)
-        player?.playWhenReady = true
 
+        playVideoInCircle()
         disposable = Flowable
             .interval(5, TimeUnit.SECONDS)
             .subscribeOn(Schedulers.io())
@@ -83,21 +82,21 @@ class MainActivity : AppCompatActivity(), VideoRendererEventListener, Player.Eve
         cv.layoutParams = params
         setRandomCardBackground()
 
-        rfl.visibility = View.VISIBLE
         cv.visibility = View.VISIBLE
-        exo_player_full_screen.visibility = View.GONE
+        rfl.alpha = 1f
+        exo_player_full_screen.alpha = 0f
 
         exo_player.player = player
-        exo_player.requestFocus()
+        player?.playWhenReady = true
     }
 
     private fun playVideoInFullScreenMode() {
-        rfl.visibility = View.GONE
         cv.visibility = View.GONE
-        exo_player_full_screen.visibility = View.VISIBLE
+        rfl.alpha = 0f
+        exo_player_full_screen.alpha = 1f
 
         exo_player_full_screen.player = player
-        exo_player_full_screen.requestFocus()
+        player?.playWhenReady = true
     }
 
     private fun setRandomCardBackground() {
